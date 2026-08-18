@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSPITAL COMMAND NETWORK</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>HOSPITAL COMMAND</h1>
+                <span class="subtitle">NETWORK</span>
+            </div>
+            <div class="header-info">
+                <div id="globalSimulationIndicator" class="global-simulation-indicator" style="display: none;">
+                    <span class="simulation-icon">🔴</span>
+                    <span class="simulation-text">SIMULACIÓN ACTIVA</span>
+                </div>
+                <div class="network-status">
+                    <span class="status-label">Estado de la Red:</span>
+                    <span id="networkStatusIndicator" class="status-indicator"></span>
+                </div>
+                <div class="datetime">
+                    <span id="currentDateTime"></span>
+                </div>
+                <button class="config-btn" title="Configuración">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="hospitals">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-4h8v4"></path>
+                    </svg>
+                    <span>Hospitales</span>
+                </a>
+                <a href="#resources" class="nav-item" data-section="resources">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+                        <line x1="16" y1="8" x2="2" y2="22"></line>
+                        <line x1="17.5" y1="15" x2="9" y2="15"></line>
+                    </svg>
+                    <span>Recursos</span>
+                </a>
+                <a href="map/index.html" class="nav-item" target="_self" id="mapLink">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                    <span>Mapa</span>
+                </a>
+                <a href="emergencies.html" class="nav-item" target="_self">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Emergencias</span>
+                </a>
+                <a href="simulation.html" class="nav-item" data-section="simulations">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Simulaciones</span>
+                </a>
+                <a href="#reports" class="nav-item" data-section="reports">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Informes</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Emergencia o simulación activa -->
+            <div id="activeSimulationBanner" class="active-simulation-banner" style="display: none;">
+                <div class="banner-content">
+                    <div class="banner-icon">🚨</div>
+                    <div class="banner-info">
+                        <h3>SIMULACIÓN EN CURSO</h3>
+                        <div class="banner-details">
+                            <span id="bannerEmergencyType">TERREMOTO</span> — 
+                            <span id="bannerLocation">ALTA GRACIA</span>
+                        </div>
+                        <div class="banner-metrics">
+                            <span><span id="bannerTimeLabel">Tiempo:</span> <span id="bannerTime">T+ 00:00</span></span> |
+                            <span><span id="bannerHospitalLabel">Hospitales saturados:</span> <span id="bannerSaturated">0</span></span> |
+                            <span>Pacientes: <span id="bannerPatients">0</span></span>
+                        </div>
+                    </div>
+                    <div class="banner-actions">
+                        <a class="btn-simulation" href="emergencies.html">VER EMERGENCIA</a>
+                        <a class="btn-simulation" href="simulation.html">SIMULAR</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>Dashboard de la Red</h2>
+                    <p class="section-subtitle">Estado general de la red hospitalaria</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon hospitals-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-4h8v4"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalHospitals">0</h3>
+                            <p>Hospitales Conectados</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon normal-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="normalHospitals">0</h3>
+                            <p>Hospitales Normales</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon warning-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="alertHospitals">0</h3>
+                            <p>Hospitales en Alerta</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon saturated-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="saturatedHospitals">0</h3>
+                            <p>Hospitales Saturados</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon occupation-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="averageOccupation">0%</h3>
+                            <p>Ocupación Promedio</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon beds-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 4v16"></path>
+                                <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
+                                <path d="M2 17h20"></path>
+                                <path d="M6 8v9"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="availableBeds">0</h3>
+                            <p>Camas Disponibles</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon critical-beds-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="availableCriticalBeds">0</h3>
+                            <p>Camas Críticas</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon ambulances-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                                <circle cx="7" cy="17" r="2"></circle>
+                                <circle cx="17" cy="17" r="2"></circle>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="availableAmbulances">0</h3>
+                            <p>Ambulancias</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Status Section -->
+                <div class="network-section">
+                    <div class="section-header">
+                        <h3>Estado de la Red</h3>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <label for="searchInput">Buscar:</label>
+                            <input type="text" id="searchInput" placeholder="Nombre del hospital...">
+                        </div>
+                        <div class="filter-group">
+                            <label for="statusFilter">Estado:</label>
+                            <select id="statusFilter">
+                                <option value="all">Todos</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="ADVERTENCIA">Advertencia</option>
+                                <option value="ALTA DEMANDA">Alta Demanda</option>
+                                <option value="SATURADO">Saturado</option>
+                                <option value="FUERA DE SERVICIO">Fuera de Servicio</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sortBy">Ordenar por:</label>
+                            <select id="sortBy">
+                                <option value="name">Nombre</option>
+                                <option value="occupation">Ocupación</option>
+                                <option value="availableBeds">Camas Disponibles</option>
+                                <option value="criticalBeds">Camas Críticas</option>
+                                <option value="risk">Nivel de Riesgo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Hospitals Grid -->
+                    <div id="hospitalsGrid" class="hospitals-grid">
+                        <!-- Hospital cards will be rendered here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hospitals Section -->
+            <section id="hospitals" class="section">
+                <div class="section-header">
+                    <h2>Hospitales</h2>
+                    <p class="section-subtitle">Listado completo de hospitales</p>
+                </div>
+                <div id="hospitalsListSection" class="hospitals-grid">
+                    <!-- Hospital cards will be rendered here -->
+                </div>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources" class="section">
+                <div class="section-header">
+                    <h2>Recursos</h2>
+                    <p class="section-subtitle">Estado de recursos de la red</p>
+                </div>
+                <div class="resources-overview" id="resourcesOverview">
+                    <p>Cargando recursos de la red...</p>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section id="map" class="section">
+                <div class="section-header">
+                    <h2>Mapa de la Red</h2>
+                    <p class="section-subtitle">Ubicación geográfica de los hospitales</p>
+                </div>
+                <div class="map-container">
+                    <div id="networkMap" class="network-map">
+                        <!-- Map markers will be rendered here -->
+                    </div>
+                    <div class="map-legend">
+                        <h4>Leyenda</h4>
+                        <div class="legend-item">
+                            <span class="legend-color normal"></span>
+                            <span>Normal</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color warning"></span>
+                            <span>Advertencia</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color high-demand"></span>
+                            <span>Alta Demanda</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color saturated"></span>
+                            <span>Saturado</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color out-of-service"></span>
+                            <span>Fuera de Servicio</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulaciones Section -->
+            <section id="simulations" class="section">
+                <div class="section-header">
+                    <h2>Simulaciones</h2>
+                    <p class="section-subtitle">Motor de simulación de catástrofes</p>
+                </div>
+
+                <!-- Estado de Simulación -->
+                <div class="simulation-status-card" id="simulationStatusCard">
+                    <div class="status-header">
+                        <h3 id="simulationStatusTitle">Sin simulación activa</h3>
+                        <div id="simulationStatusBadge" class="status-badge normal">🟢 NORMAL</div>
+                    </div>
+                    
+                    <div id="simulationStatusContent" class="status-content">
+                        <p>No hay ninguna simulación de emergencia ejecutándose.</p>
+                        <p>Para iniciar una simulación, primero debe configurar una emergencia.</p>
+                    </div>
+                    
+                    <div class="status-actions">
+                        <a href="emergencies.html" class="btn-primary">
+                            📋 CONFIGURAR EMERGENCIA
+                        </a>
+                        <a href="simulation.html" class="btn-secondary" id="simulationPageBtn">
+                            ⚙️ IR A SIMULACIÓN
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Historial de Simulaciones -->
+                <div class="simulation-history">
+                    <h3>Historial de Simulaciones</h3>
+                    <div id="simulationHistoryList" class="history-list">
+                        <div class="no-history">No hay simulaciones registradas</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Placeholder sections for future layers -->
+            <section id="emergencies" class="section">
+                <div class="section-header">
+                    <h2>Emergencias</h2>
+                    <p class="section-subtitle">Gestión de situaciones de emergencia</p>
+                </div>
+                <div class="emergency-redirect">
+                    <h3>Central de Emergencias</h3>
+                    <p>La gestión completa de emergencias se encuentra en la Central de Emergencias.</p>
+                    <a href="emergencies.html" class="btn-primary-large">
+                        🚨 IR A CENTRAL DE EMERGENCIAS
+                    </a>
+                </div>
+            </section>
+
+            <section id="reports" class="section">
+                <div class="section-header">
+                    <h2>Informes</h2>
+                    <p class="section-subtitle">Reportes y análisis de datos</p>
+                </div>
+                <div class="simulation-status-card" id="emergencyReportCard">
+                    <div class="status-header">
+                        <h3>Informe operativo de emergencias</h3>
+                        <div id="reportStatusBadge" class="status-badge normal">SIN EMERGENCIAS</div>
+                    </div>
+                    <div id="emergencyReportContent" class="status-content">
+                        <p>No hay emergencias registradas.</p>
+                    </div>
+                    <div class="status-actions">
+                        <a href="emergencies.html" class="btn-primary">🚨 ABRIR CENTRAL</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Hospital Detail Modal -->
+    <div id="hospitalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalHospitalName">Nombre del Hospital</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="hospital-detail-info">
+                    <div class="detail-section">
+                        <h4>Información General</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Ubicación:</span>
+                            <span id="modalLocation" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estado:</span>
+                            <span id="modalStatus" class="detail-value status-badge"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Camas</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Totales:</span>
+                            <span id="modalTotalBeds" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Ocupadas:</span>
+                            <span id="modalOccupiedBeds" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponibles:</span>
+                            <span id="modalAvailableBeds" class="detail-value"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="modalBedsProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Camas Críticas</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Totales:</span>
+                            <span id="modalTotalCritical" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Ocupadas:</span>
+                            <span id="modalOccupiedCritical" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponibles:</span>
+                            <span id="modalAvailableCritical" class="detail-value"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="modalCriticalProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Guardia</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Ocupación:</span>
+                            <span id="modalGuardia" class="detail-value"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="modalGuardiaProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Personal</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Total:</span>
+                            <span id="modalTotalPersonal" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponible:</span>
+                            <span id="modalAvailablePersonal" class="detail-value"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="modalPersonalProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Quirófanos</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Totales:</span>
+                            <span id="modalTotalQuirofanos" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponibles:</span>
+                            <span id="modalAvailableQuirofanos" class="detail-value"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Ambulancias</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponibles:</span>
+                            <span id="modalAmbulancias" class="detail-value"></span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Insumos</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Disponibilidad:</span>
+                            <span id="modalInsumos" class="detail-value"></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="modalInsumosProgress" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section alerts-section">
+                        <h4>Alertas de Recursos</h4>
+                        <div id="modalAlerts" class="alerts-container">
+                            <!-- Alerts will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/hospitals.js"></script>
+    <script src="js/network-expansion.js"></script>
+    <script src="js/shared-state.js"></script>
+    <script src="js/risk-engine.js"></script>
+    <script src="js/emergency-engine.js"></script>
+    <script src="js/global-simulation.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
